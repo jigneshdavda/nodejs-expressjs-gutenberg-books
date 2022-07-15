@@ -8,7 +8,7 @@ async function filtering_books(formData) {
   // Check values for below params
 
   // Check for book_number
-  if (formData.book_number.trim()) {
+  if (formData.book_number.trim() != '') {
     let tempNumber = formData.book_number.split(",");
     tempNumber = tempNumber.join("','");
     filterQuery +=
