@@ -2,6 +2,10 @@
 const db = require("../util/database");
 
 async function filtering_books(formData) {
+
+  // Log form data
+  // console.log("Formd data: ", formData);
+
   // Declare string for query
   let filterQuery = "";
 
@@ -38,7 +42,7 @@ async function filtering_books(formData) {
   // Check for author
   if (formData.author.trim()) {
     filterQuery +=
-      "(SELECT bba.book_id as od FROM `books_author` as ba, `books_book_authors` as bba WHERE ba.id = bba.author_id AND ba.name LIKE '%" +
+      "(SELECT bba.book_id as id FROM `books_author` as ba, `books_book_authors` as bba WHERE ba.id = bba.author_id AND ba.name LIKE '%" +
       formData.author +
       "%' ) UNION ";
   }
@@ -75,6 +79,9 @@ async function filtering_books(formData) {
     filterQuery = filterQuery;
   }
 
+  // Log filtered query
+  // console.log("Filter query: ", filterQuery);
+
   // Check for filterQuery empty string
   var filteredResults = "";
   if (filterQuery) {
@@ -85,6 +92,8 @@ async function filtering_books(formData) {
       .execute(filterQuery)
       .then(([rows, fields]) => {
         filteredResults = rows;
+
+        // console.log("Filtered Results: ", filteredResults);
 
         if (filteredResults) {
           // Parse book id from the result
@@ -114,6 +123,8 @@ async function get_books_info(filteredBookIds, limit) {
   } else {
     whereQuery = "";
   }
+
+  // console.log("Where query: ", whereQuery);
 
   let bookQuery =
     "SELECT id, title, gutenberg_id FROM books_book " +
